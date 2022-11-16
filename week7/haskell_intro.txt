@@ -1,0 +1,112 @@
+-- run each of these in GHCi (the Haskell REPL)
+-- these are from in-class
+
+-- this declares "x" to be 5
+-- it is not a "variable" like in other languages
+-- rather, it is like "let x = 5" would be in a math proof
+-- it is immutable and cannot be changed
+let x = 5
+
+-- the declares "x" to be a list
+-- note that this is overwriting the previous definition
+-- in a real file, it wouldn't be allowed
+-- but we were in a REPL
+let x = [1, 2, 3, 4]
+
+-- that was shorthand for this:
+let x = 1 : 2 : 3 : 4 : []
+
+-- get an element at an index using !!
+x !! 1
+x !! 3
+
+-- strings are lists too
+let x = "hello, world!"
+x !! 2
+
+-- concatenate lists using ++
+-- remember strings are lists
+-- and remember everything is immutable
+[1, 2, 3] ++ [4, 5, 6]
+"hello " ++ "world"
+
+-- there are some quirks in syntax...
+-- instead of != for not-equals, it's /=
+5 /= 4
+
+-- get the head of a list (the first element)
+head [1, 2, 3, 4]
+
+-- get the rest of the list (everything but the first)
+tail [1, 2, 3, 4]
+
+-- combine things
+head (tail [1, 2, 3, 4])
+
+-- use the $ to omit parens (it does more than that too)
+head $ tail [1, 2, 3, 4]
+
+-- omit the argument and use function composition, like "f of g" in math
+head . tail
+
+-- save as a function/definition
+let myfunc xs = head (tail xs)
+-- shorter
+let myfunc xs = head $ tail xs
+-- math-y
+let myfunc = head . tail
+
+-- call that previous myfunc like any other function
+myfunc [1, 2, 3, 4]
+
+-- let's look at map again
+map (\x -> x + 1) [1, 2, 3, 4]
+-- store it:
+let myfunc xs = map (\x -> x + 1) xs
+-- shorter
+let myfunc xs = map (+ 1) xs
+-- math-y, and so clean!
+let myfunc = map (+ 1)
+
+-- call myfunc like normal
+myfunc [1, 2, 3, 4]
+
+-- you can compose as many functions as you want (including your own)
+-- that's all anything is anyway!
+let myfunc = head . tail . tail
+-- use it
+map myfunc ["asdf", "bob", "sally"]
+-- same thing but expanded
+map (head . tail . tail) ["asdf", "bob", "sally"]
+-- expanded more
+map (\x -> head $ tail $ tail x) ["asdf", "bob", "sally"]
+-- even more
+map (\x -> head (tail (tail x))) ["asdf", "bob", "sally"]
+
+-- those were all equivalent
+
+-- btw, you can compare entire data structures
+[1, 2, 3] < [2, 3, 4]
+
+-- when you use an infix operator like + or ++,
+--  surrounding it in parens makes it behave "normal"
+-- infix:
+"hello " ++ "world"
+-- "normal" prefix
+map (++ ", world") ["hello", "goodbye"]
+
+-- that $ sign does more than simply omitting parens
+-- it lets you treat data as functions
+-- and remember that every function only takes one arg and returns one thing
+-- just like math!
+map ($ 3) [(4 +), (3 *)]
+
+-- final example, fibonacci sequence
+let fibs = 0 : 1 : zipWith (+) fibs (tail fibs)
+let fib n = fibs !! n
+
+-- get a fibonacci number
+fib 10
+
+-- crazy!
+-- glhf :)
